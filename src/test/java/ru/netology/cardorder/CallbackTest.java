@@ -31,7 +31,8 @@ public class CallbackTest {
        options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--no-sandbox");
         options.addArguments("--headless");
-        driver = new ChromeDriver(options);
+        driver = new ChromeDriver();
+        driver.get("http://localhost:9999");
     }
 
     @AfterEach
@@ -42,8 +43,8 @@ public class CallbackTest {
 
     @Test
     void shouldTestSomething() {
-        driver.get("http://localhost:9999");
-        driver.findElement(By.cssSelector("[type=\"text\"]")).sendKeys("Петька");
+
+        driver.findElement(By.cssSelector("[type=\"text\"]")).sendKeys("Иван");
         driver.findElement(By.cssSelector("[type=\"tel\"]")).sendKeys("+79871234567");
         driver.findElement(By.cssSelector(".checkbox__box")).click();
         driver.findElement(By.cssSelector(".button__text")).click();
