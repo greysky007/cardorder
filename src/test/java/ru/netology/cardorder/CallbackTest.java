@@ -17,6 +17,7 @@ import java.lang.module.Configuration;
 import java.sql.Driver;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CallbackTest {
     private WebDriver driver;
@@ -73,7 +74,7 @@ public class CallbackTest {
         driver.findElement(By.cssSelector("[type=\"tel\"]")).sendKeys("+78766842649");
         driver.findElement(By.xpath("//label[@data-test-id = 'agreement']")).click();
         driver.findElement(By.cssSelector(".button__text")).click();
-        String text = driver.findElement(By.xpath("//span[@data-test-id = 'name']//span[@class='input__sub']")).getText();
+        String text = driver.findElement(By.xpath("//span[@data-test-id = 'name' and contains(@class,'input_invalid')]//span[@class='input__sub']")).getText();
         assertEquals("Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы.", text.trim());
     }
 
@@ -83,39 +84,37 @@ public class CallbackTest {
         driver.findElement(By.cssSelector("[type=\"tel\"]")).sendKeys("88766842649");
         driver.findElement(By.xpath("//label[@data-test-id = 'agreement']")).click();
         driver.findElement(By.cssSelector(".button__text")).click();
-        String text = driver.findElement(By.cssSelector("[data-test-id='phone'].input_invalid .input__sub")).getText();
+        String text = driver.findElement(By.xpath("//span[@data-test-id = 'phone' and contains(@class,'input_invalid')]//span[@class='input__sub']")).getText();
         assertEquals("Телефон указан неверно. Должно быть 11 цифр, например, +79012345678.", text.trim());
     }
+
     @Test
     void shouldTestEmptyName() {
 
         driver.findElement(By.cssSelector("[type=\"tel\"]")).sendKeys("88766842649");
         driver.findElement(By.xpath("//label[@data-test-id = 'agreement']")).click();
         driver.findElement(By.cssSelector(".button__text")).click();
-        String text = driver.findElement(By.xpath("//span[@data-test-id = 'name']//span[@class = 'input__sub']")).getText();
+        String text = driver.findElement(By.xpath("//span[@data-test-id = 'name' and contains(@class,'input_invalid')]//span[@class='input__sub']")).getText();
         assertEquals("Поле обязательно для заполнения", text.trim());
     }
+
     @Test
     void shouldTestEmptyPhone() {
         driver.findElement(By.cssSelector("[type=\"text\"]")).sendKeys("Иванов-Петров Иван");
         driver.findElement(By.xpath("//label[@data-test-id = 'agreement']")).click();
         driver.findElement(By.cssSelector(".button__text")).click();
-        String text = driver.findElement(By.xpath("//span[@data-test-id = 'phone']//span[@class = 'input__sub']")).getText();
+        String text = driver.findElement(By.xpath("//span[@data-test-id = 'phone' and contains(@class,'input_invalid')]//span[@class='input__sub']")).getText();
         assertEquals("Поле обязательно для заполнения", text.trim());
     }
 
-   /* @Test
+    @Test
     void shouldTestEmptyCheckBox() {
 
-
-
         driver.findElement(By.cssSelector("[type=\"text\"]")).sendKeys("Иванов-Петров Иван");
-        driver.findElement(By.cssSelector("[type=\"tel\"]")).sendKeys("88766842649");
+        driver.findElement(By.cssSelector("[type=\"tel\"]")).sendKeys("+78766842649");
         driver.findElement(By.cssSelector(".button__text")).click();
-        WebElement element = driver.findElement(By.xpath("//label[@data-test-id = 'agreement']"));
-               String col = element.getCssValue("color");
-        assertEquals("rgb(255 92 92)", col);
-    }*/
+        assertTrue(driver.findElement(By.xpath("//label[@data-test-id='agreement' and contains(@class, 'input_invalid')]")).isDisplayed());
+    }
 }
 
 
